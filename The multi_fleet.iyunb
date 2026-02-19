@@ -1,0 +1,36 @@
+import json
+fleet = [
+    {"Robot":'A',
+    "battery": 90,
+    "status":"Active"},
+    {"Robot":'B',
+    "battery": 20,
+    "status":"Active"},
+    {"Robot":'C',
+    "battery": 50,
+    "status":"charging"},
+]
+with open("fleet_data.json", "w") as file:
+  json.dump(fleet,file)
+
+print("json dumped sucessfully")
+def check_fleet_health():
+  with open("fleet_data.json", "r") as file:
+    current_fleet = json.load(file)
+
+  need_update = False  # Initialize the variable to prevent UnboundLocalError
+
+  for robot in current_fleet:
+    if robot["battery"] < 30:
+      print(f"Alert {robot['battery']} battery critical")
+      robot["status"] = "Emergency"
+      need_update = True
+
+  if need_update:
+    with open("fleet_data.json","w") as file:
+      json.dump(current_fleet,file)
+      print("data updated successfully")
+  else:
+    print("All robots are healthy")
+
+check_fleet_health()
